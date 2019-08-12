@@ -1,0 +1,40 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url(/images/background-1.jpg); 
+  /* background-size:     cover; */
+  background-repeat:   no-repeat;
+  background-position: center center;
+
+}
+
+
+div.btn-container a {
+  color: black;
+  display: table;
+  width: 100%; /*Optional*/
+  table-layout: fixed; /*Optional*/
+  border-spacing: 10px; /*Optional*/
+  font-size: 18px;
+}
+h1 {
+  color: black
+}
+
+
+
+div.pre-space { display: none;}
+
+
+
+
+/* body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url(/images/background-1.jpg);
+  background-size:     cover;
+  background-repeat:   no-repeat;
+  background-position: center center;
+  height: 100%;
+
+} */

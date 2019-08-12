@@ -1,0 +1,11 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/mongoupload.css')
+  body
+    h1 Upload File to The MongoDB
+    p select one or more of the following files to upload to MonogoDB
+    .files-container
+        each val in records
+            a(class='rec-val', href='mongodbUpload/file/' + val) #{val} 

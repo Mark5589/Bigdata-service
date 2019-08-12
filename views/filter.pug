@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/stylesheets/filter.css')
+  body.filter
+    form(action='/filter/filteredData', method='POST')
+        p
+          | from date:
+          input(type="date" name="fromDate" id="dateofbirth", value='')
+          | to date:
+          input(type='date', name='toDate', ,id="dateofbirth" value='')
+        input(type='submit', value='Submit')
+    .table
+        p place for table that will be randered by selected dates
+
+
+        //- input(type='text', name='fromDate', value='')
+        //-   |          to date: 
+        //-   input(type='text', name='toDate', value='')
+        //-   |
