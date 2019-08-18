@@ -4,7 +4,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-
+//// Connection to MongoDB Atlas.
+const mongoose = require('mongoose');
+const mongoDB = 'mongodb+srv://adminMark:BTpVAVezaReAqaad@bigdata-analyse-zmcli.mongodb.net/BIGDATA?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, {useNewUrlParser: true});
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
