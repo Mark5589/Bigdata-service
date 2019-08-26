@@ -8,15 +8,23 @@
   },
   "dependencies": {
     "async": "^3.1.0",
+    "axios": "^0.19.0",
+    "bigml": "^1.20.4",
     "cookie-parser": "~1.4.4",
+    "csv-express": "^1.2.2",
+    "csv-parser": "^2.3.0",
+    "cytoscape": "^3.9.1",
     "debug": "^2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "json2csv": "^4.5.2",
     "mongoose": "^5.6.4",
     "morgan": "~1.9.1",
     "multer": "^1.4.1",
+    "node-fetch": "^2.6.0",
     "pug": "^2.0.4",
+    "request": "^2.88.0",
     "xlsx-to-json": "^0.3.0"
   },
   "devDependencies": {
