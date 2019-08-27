@@ -18,7 +18,8 @@ let resBatchFile = {
   cluster2:[],
   cluster3:[]
 };
-
+let dateItems={};
+let sortedDateItems = [];
 
 const util = require('util')
 
@@ -36,22 +37,29 @@ exports.filter_main = (req, res) => {
 };
 
 exports.search_result = (req, res, next) => {
+    req.body.fromDate = req.body.toDate = '2010-12-01';
+    req.body.fromTime = '09:00';
+    req.body.toTime = '14:00';
     const fromQuery = req.body.fromDate + 'T' + req.body.fromTime + ':00.000Z'
     const toQuery = req.body.toDate + 'T' + req.body.toTime + ':00.000Z'
+    
     //select retails from mongoDB by date
 
     debug(fromQuery + ' --__--> ' + toQuery);
     Retail.find({date : {$gte: new Date(fromQuery), $lte: new Date(toQuery) }}, {retail_id: 1, customer_id: 1, items: 1} , (err, docs)=>{
         if (err) {return next(err); }
-        docs.forEach(e => debug(e['retail_id']));
+        // docs.forEach(e => debug(e['items']));
+        
         async.series([
+            async.apply(getStatistic, docs),
             // async.apply(sleep, 3000)
             async.apply(mongoDBResponse2csv, docs),
             async.apply(bigMLController,  './public/outCSVs/mongoDBQuery.csv')  
         ], 
         function(err, result){
             if(err) {return next(err);}
-          res.render('filter', {a_style: 'display: inline;'})
+            const mostPopular = `${sortedDateItems[0][0]} was bought in ${sortedDateItems[0][1]} different retails.`
+          res.render('filter', {a_style: 'display: inline;', most_popular_item: mostPopular})
         });
     });
 }
@@ -73,6 +81,24 @@ exports.show_graph_results = (req, res, next) => {
     });      
     });
 };
+
+const getStatistic = (docs, cb)=> {
+  dateItems = {};
+  sortedDateItems = [];
+  docs.forEach(el => el['items'].forEach(item =>{
+    if(dateItems[item] == null) {dateItems[item] = 1;}
+    else dateItems[item] += 1;
+  }))
+  
+  // dateItems.forEach( (key, val) => sorted.push([key, val]))
+  for(var it in dateItems){
+    sortedDateItems.push([it, dateItems[it]]);
+  }
+  sortedDateItems.sort((a,b)=>{return b[1] - a[1]});
+  
+  debug(sortedDateItems[0]);
+  cb(null);
+} 
 const downloadURL  = async  (url, pathto) => {
     debug('Downloading From: ' + url);
     // url ='https://bigml.io/andromeda/batchcentroid/5d615668529963040900fd33/download?username=mark5589;api_key=8e12ffdb67a89003140d736bf63a055bbde9f2a1'
@@ -143,7 +169,6 @@ const mongoDBResponse2csv = (res, cb) => {
     // const filepath = path.join(__dirname, '../public/outCSVs','progMONGO.csv');
     fs.writeFile('./public/outCSVs/mongoDBQuery.csv', csv, (err)=>{
         if (err) throw err;
-        
        
        cb(null);
     });
@@ -154,15 +179,9 @@ const readFileCSV = (cb) => {
   resBatchFile['cluster1'] = [];
   resBatchFile['cluster2'] = [];
   resBatchFile['cluster3'] = [];
-  // var stop = new Date().getTime();
-    // while(new Date().getTime() < stop + 10000) {
-    //     ;
-    // }
  
 
-  // let tmp = 'cluster0';
-  // resBatchFile[tmp].push('hello');
-  // debug(resBatchFile['cluster0'][0]);
+  
   debug('reading Batch centroid csv file..')
   fs.createReadStream('./public/outCSVs/batchCentroidRes.csv')
   .pipe(csv())
